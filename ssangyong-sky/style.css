@@ -790,3 +790,5 @@ a {
 .hero>img{opacity:.66;object-position:center 56%}.hero-overlay{background:linear-gradient(90deg,rgba(15,13,11,.82) 0%,rgba(15,13,11,.72) 48%,rgba(15,13,11,.38) 100%)}.hero-content h1,.hero-content>p{text-shadow:0 2px 8px rgba(0,0,0,.55)}.site-header{background:rgba(15,13,11,.42)}.hero .actions .button:not(.dark){background:rgba(15,13,11,.45)}
 @media(max-width:560px){.hero-overlay{background:linear-gradient(90deg,rgba(15,13,11,.78),rgba(15,13,11,.64))}.hero>img{object-position:53% center}}
 .kakao-icon{display:block;width:32px;height:32px;object-fit:contain}
+/* Fill the gallery frame without letterboxing; the dialog retains the entire image. */
+.image-stage img{object-fit:cover}
