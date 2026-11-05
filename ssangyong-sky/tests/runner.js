@@ -57,7 +57,7 @@ document.getElementById('run').onclick = async()=>{
  const phone=d.querySelector('a[href^="tel:"]');phone.addEventListener('click',e=>e.preventDefault());phone.click();check(events('click_phone').length===1,'전화 클릭 이벤트 1회 (실제 전화 없음)');
  w.SSANGYONG_DATA.contact.recipientVerified=false;$('name').value='검증';$('phone').value='01012345678';$('consent').checked=true;const count=requests.length;submit();check(requests.length===count&&$('formStatus').textContent.includes('전송되지'),'수신 설정 미완료 전송 차단');
  await load('/1906-iste/ssangyong-sky/');w=frame.contentWindow;d=w.document;$=id=>d.getElementById(id);
- check($('setupNotice').textContent.includes('준비')&&$('designImage').hidden,'실제 데이터는 준비 중·시안 미노출');
+ check($('setupNotice').textContent.includes('준비')&&!$('designImage').hidden&&$('imageCounter').textContent==='1 / 5','실제 데이터는 114 A,B 시안 5장·온라인 접수 준비 중');
  check(!d.body.textContent.includes('144.73')&&!d.body.textContent.includes('360'),'잘못된 면적·제외 기능 없음');
  for(const width of [320,390,768,1440]){frame.style.width=width+'px';await delay(80);check(d.documentElement.scrollWidth<=d.documentElement.clientWidth,'가로 넘침 없음 '+width+'px');}
  await load('/1906-iste/');w=frame.contentWindow;d=w.document;
