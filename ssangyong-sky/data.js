@@ -11,7 +11,7 @@ window.SSANGYONG_DATA = {
     privacyApproved:false, retention:''
   },
   types: [
-    {id:'114B',label:'114㎡B(34평)',description:'114㎡B(34평) 전용 3D 제안 시안을 준비하고 있습니다. 원하는 공간과 공사 범위를 상담해주세요.',images:[],estimate:{price:'상담 후 안내',included:'상담 후 안내',excluded:'상담 후 안내',vat:'상담 후 안내'}},
+    {id:'114B',label:'114㎡ A,B(34평)',description:'114㎡ A,B(34평) 전용 3D 제안 시안을 준비하고 있습니다. 원하는 공간과 공사 범위를 상담해주세요.',images:[],estimate:{price:'상담 후 안내',included:'상담 후 안내',excluded:'상담 후 안내',vat:'상담 후 안내'}},
     {id:'114C',label:'114㎡C(34평)',description:'114㎡C(34평) 전용 3D 제안 시안을 준비하고 있습니다. 원하는 공간과 공사 범위를 상담해주세요.',images:[],estimate:{price:'상담 후 안내',included:'상담 후 안내',excluded:'상담 후 안내',vat:'상담 후 안내'}},
     {id:'144',label:'144㎡(44평)',description:'144㎡(44평) 전용 3D 제안 시안을 준비하고 있습니다. 원하는 공간과 공사 범위를 상담해주세요.',images:[],estimate:{price:'상담 후 안내',included:'상담 후 안내',excluded:'상담 후 안내',vat:'상담 후 안내'}},
     {id:'170',label:'170㎡(51평)',description:'170㎡(51평) 전용 3D 제안 시안을 준비하고 있습니다. 원하는 공간과 공사 범위를 상담해주세요.',images:[],estimate:{price:'상담 후 안내',included:'상담 후 안내',excluded:'상담 후 안내',vat:'상담 후 안내'}}
