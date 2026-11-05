@@ -134,7 +134,7 @@
   if (data.hero) {
     $('heroImage').onload = () => { $('heroImage').hidden = false; $('heroPlaceholder').hidden = true; };
     $('heroImage').onerror = () => { $('heroImage').hidden = true; $('heroPlaceholder').hidden = false; };
-    setImage($('heroImage'), data.hero, '(max-width:560px) calc(100vw - 48px), 560px');
+    setImage($('heroImage'), data.hero, '100vw');
   }
   if (data.logo) document.querySelectorAll('.brand').forEach(brand => {
     const img = document.createElement('img'); setImage(img, {...data.logo,alt:'1906 INTERIOR'}, '180px');

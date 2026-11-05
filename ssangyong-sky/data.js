@@ -3,8 +3,8 @@ window.SSANGYONG_DATA = {
   apartmentId: 'ssangyong_sky', apartmentName: '서면쌍용스윗닷홈', measurementId: 'G-BH516Y53QM',
   // 원본 로고를 받으면 {src:'./assets/logo.webp',width:...,height:...} 지정.
   logo: null,
-  // 실제 서면쌍용 대표 시안만 지정. images와 같은 구조.
-  hero: null,
+  // 사용자가 제공한 대문 이미지. 타입별 실내 3D 시안과 구분합니다.
+  hero: {src:'./assets/gate-1600.webp',srcset:'./assets/gate-800.webp 800w, ./assets/gate-1600.webp 1600w',width:1600,height:900,alt:'서면쌍용스윗닷홈스카이 대문과 조경 — 제공 이미지'},
   contact: {
     endpoint:'https://api.web3forms.com/submit', accessKey:'',
     recipient:'1906interior@naver.com', recipientVerified:false,
