@@ -57,7 +57,12 @@ document.getElementById('run').onclick = async()=>{
  const phone=d.querySelector('a[href^="tel:"]');phone.addEventListener('click',e=>e.preventDefault());phone.click();check(events('click_phone').length===1,'전화 클릭 이벤트 1회 (실제 전화 없음)');
  w.SSANGYONG_DATA.contact.recipientVerified=false;$('name').value='검증';$('phone').value='01012345678';$('consent').checked=true;const count=requests.length;submit();check(requests.length===count&&$('formStatus').textContent.includes('전송되지'),'수신 설정 미완료 전송 차단');
  await load('/1906-iste/ssangyong-sky/');w=frame.contentWindow;d=w.document;$=id=>d.getElementById(id);
- check($('setupNotice').textContent.includes('준비')&&!$('designImage').hidden&&$('imageCounter').textContent==='1 / 7','실제 데이터는 114 A,B 시안 7장·온라인 접수 준비 중');
+ check(!$('setupNotice')&&!$('designImage').hidden&&$('imageCounter').textContent==='1 / 7','실제 데이터는 114 A,B 시안 7장·상단 준비 안내 삭제');
+ for(const [id,price] of [['114B','4,760만원'],['114C','4,760만원'],['144','6,100만원'],['170','7,200만원']]){
+  $('tab-'+id).click();$('openIncluded').click();
+  check($('includedDialog').open&&$('includedTotal').textContent===price&&$('estimatePrice').textContent===price&&d.querySelectorAll('.included-list li').length===9,'타입별 견적·포함공사 합계 '+id);
+  $('closeIncluded').click();
+ }
  check(!d.body.textContent.includes('144.73')&&!d.body.textContent.includes('360'),'잘못된 면적·제외 기능 없음');
  for(const width of [320,390,768,1440]){frame.style.width=width+'px';await delay(80);check(d.documentElement.scrollWidth<=d.documentElement.clientWidth,'가로 넘침 없음 '+width+'px');}
  await load('/1906-iste/');w=frame.contentWindow;d=w.document;
