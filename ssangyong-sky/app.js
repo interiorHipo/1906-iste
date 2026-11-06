@@ -88,7 +88,7 @@
     $('typeTitle').textContent = selected.label;
     $('typeDescription').textContent = selected.description;
     $('estimateType').textContent = selected.label;
-    for (const [suffix, key] of [['Price','price'],['Included','included'],['Excluded','excluded'],['Vat','vat']]) {
+    for (const [suffix, key] of [['Price','price'],['Vat','vat']]) {
       $('estimate' + suffix).textContent = selected.estimate[key] || '상담 후 안내';
     }
     $('formType').value = id;
@@ -126,6 +126,15 @@
     viewer.showModal(); document.body.style.overflow = 'hidden'; renderViewer();
     event('view_design_image', selected.id, {image_index:page+1});
   };
+  const includedDialog = $('includedDialog');
+  $('openIncluded').onclick = () => {
+    $('includedType').textContent = selected.label;
+    $('includedTotal').textContent = selected.estimate.price;
+    $('includedVat').textContent = selected.estimate.vat || '상담 후 안내';
+    includedDialog.showModal(); document.body.style.overflow = 'hidden';
+  };
+  $('closeIncluded').onclick = () => includedDialog.close();
+  includedDialog.addEventListener('close', () => { document.body.style.overflow = ''; $('openIncluded').focus(); });
   $('closeViewer').onclick = () => viewer.close();
   viewer.addEventListener('click', e => { if (e.target === viewer) { const r = viewer.getBoundingClientRect(); if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) viewer.close(); } });
   viewer.addEventListener('close', () => { document.body.style.overflow = ''; $('openViewer').focus(); });
