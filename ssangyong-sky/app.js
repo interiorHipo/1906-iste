@@ -153,7 +153,7 @@
   const ready = () => !!(data.contact.accessKey && data.contact.recipientVerified && data.contact.privacyApproved && data.contact.retention.trim());
 
   if (data.contact.retention) $('retentionNotice').textContent = data.contact.retention;
-  if (!ready()) { $('submitButton').textContent = '온라인 접수 준비 중'; $('submitButton').setAttribute('aria-disabled','true'); }
+  if (!ready()) { $('submitButton').textContent = '온라인 접수'; $('submitButton').setAttribute('aria-disabled','true'); }
   const fields = {name:form.elements.name,phone:form.elements.phone,type:form.elements.type,consent:form.elements.consent};
   function validate() {
     const phone = fields.phone.value.replace(/[\s-]/g,'');
@@ -196,7 +196,7 @@
     } finally {
       clearTimeout(timeout); submitting = false;
       controls.forEach(el => {el.disabled = false;});
-      $('submitButton').textContent = '상담 신청하기 →';
+      $('submitButton').textContent = '온라인 접수';
     }
   });
   // Decorative randomized count, not a real-time analytics measurement.

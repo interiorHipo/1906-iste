@@ -160,3 +160,7 @@ QR 이벤트는 **QR 캠페인 주소로 들어온 방문**입니다. 카메라�
 - 상담 상단 setupNotice 삭제. 접수 준비 상태와 전송 제한은 유지.
 - 요청에 따라 실제 집계가 아닌 1~10 무작위 방문자 배지 추가. sessionStorage 사용 가능 시 직전 값 제외. 노란 점선 반짝임 및 reduced-motion 지원.
 - 브라우저 새로고침 6→7→3→10, 안내 요소 0개, 점선과 visitor-sparkle 스타일 및 전체 화면 확인. 구문/diff 통과.
+
+## 2026-11-06 접수 버튼 문구
+- 버튼을 온라인 접수로 통일. 브라우저 표시 및 구문/diff 확인.
+- 메일은 아직 미연결: accessKey 비어 있음, recipientVerified/privacyApproved false, retention 미정. 수신 주소만 1906interior@naver.com 기재. 실제 전송하지 않음.
