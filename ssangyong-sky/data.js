@@ -6,9 +6,9 @@ window.SSANGYONG_DATA = {
   // 사용자가 제공한 대문 이미지. 타입별 실내 3D 시안과 구분합니다.
   hero: {src:'./assets/gate-1600.webp',srcset:'./assets/gate-800.webp 800w, ./assets/gate-1600.webp 1600w',width:1600,height:900,alt:'서면쌍용스윗닷홈스카이 대문과 조경 — 제공 이미지'},
   contact: {
-    endpoint:'https://api.web3forms.com/submit', accessKey:'',
-    recipient:'1906interior@naver.com', recipientVerified:false,
-    privacyApproved:false, retention:''
+    endpoint:'https://api.web3forms.com/submit', accessKey:'2e78e14e-4b81-42d0-a0b8-f9b723fbfa84',
+    recipient:'1906interior@naver.com', recipientVerified:true,
+    privacyApproved:true, retention:'상담 종료 후 1년'
   },
   types: [
     {id:'114B',label:'114㎡ A,B(34평)',description:'114㎡ A,B(34평)을 위한 7장의 3D 제안 시안입니다. 거실·주방부터 욕실까지, 원하는 분위기를 비교해보세요.',images:[{"src":"./assets/114ab-1-1600.webp","srcset":"./assets/114ab-1-640.webp 640w, ./assets/114ab-1-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 우드 바닥과 밝은 주방 · 3D 제안 시안"},{"src":"./assets/114ab-2-1600.webp","srcset":"./assets/114ab-2-640.webp 640w, ./assets/114ab-2-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 스톤 바닥과 주방 · 3D 제안 시안"},{"src":"./assets/114ab-3-1600.webp","srcset":"./assets/114ab-3-640.webp 640w, ./assets/114ab-3-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 우드 루버 포인트 공간 · 3D 제안 시안"},{"src":"./assets/114ab-4-1600.webp","srcset":"./assets/114ab-4-640.webp 640w, ./assets/114ab-4-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 밝은 우드톤 공간 · 3D 제안 시안"},{"src":"./assets/114ab-5-1600.webp","srcset":"./assets/114ab-5-640.webp 640w, ./assets/114ab-5-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 헤링본 바닥과 클래식 몰딩 공간 · 3D 제안 시안"},{"src":"./assets/114ab-6-1600.webp","srcset":"./assets/114ab-6-640.webp 640w, ./assets/114ab-6-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 샴페인빛 유리 파티션의 우아한 욕실 · 3D 제안 시안"},{"src":"./assets/114ab-7-1600.webp","srcset":"./assets/114ab-7-640.webp 640w, ./assets/114ab-7-1600.webp 1600w","width":1600,"height":900,"alt":"114㎡ A,B(34평) 모던 욕실, 유리 샤워와 따뜻한 조명 · 3D 제안 시안"}],estimate:{price:'4,760만원',included:'상담 후 안내',excluded:'상담 후 안내',vat:'상담 후 안내'}},
