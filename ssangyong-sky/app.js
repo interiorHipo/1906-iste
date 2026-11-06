@@ -44,18 +44,45 @@
     if (item.srcset) img.srcset = item.srcset; else img.removeAttribute('srcset');
     img.src = item.src;
   }
-  function renderViewer() {
+  function prepareTransition(img, direction) {
+    const surface = img.parentElement;
+    if (img.complete && img.naturalWidth && !img.hidden) {
+      surface.querySelectorAll('.image-outgoing').forEach(el => el.remove());
+      const previous = img.cloneNode(false);
+      previous.removeAttribute('id'); previous.removeAttribute('style');
+      previous.className = 'image-outgoing'; previous.alt = '';
+      previous.setAttribute('aria-hidden','true');
+      surface.appendChild(previous);
+    }
+    img.style.opacity = '0';
+    return () => {
+      img.style.opacity = '';
+      const outgoing = [...surface.querySelectorAll('.image-outgoing')];
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches || !img.animate) {
+        outgoing.forEach(el => el.remove()); return;
+      }
+      const options = {duration:460,easing:'cubic-bezier(.22,1,.36,1)'};
+      img.animate([{transform:`translateX(${direction * 24}px) scale(1.015)`},{transform:'translateX(0) scale(1)'}],options);
+      outgoing.forEach(el => {
+        const animation = el.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:`translateX(${-direction * 16}px)`}],options);
+        animation.onfinish = () => el.remove();
+      });
+    };
+  }
+  function renderViewer(direction = 0) {
     if (!viewer.open) return;
     const item = selected.images[page];
     $('viewerTitle').textContent = `${selected.label} · 3D 제안 시안`;
     $('viewerCounter').textContent = `${page + 1} / ${selected.images.length}`;
     $('viewerError').hidden = true;
+    const reveal = prepareTransition($('viewerImage'), direction);
     $('viewerImage').hidden = false;
-    $('viewerImage').onerror = () => { $('viewerError').hidden = false; $('viewerImage').hidden = true; };
+    $('viewerImage').onload = reveal;
+    $('viewerImage').onerror = () => { reveal(); $('viewerError').hidden = false; $('viewerImage').hidden = true; };
     setImage($('viewerImage'), item, '94vw');
     $('viewerPrev').disabled = $('viewerNext').disabled = selected.images.length < 2;
   }
-  function renderImage() {
+  function renderImage(direction = 0) {
     const version = ++imageVersion;
     const item = selected.images[page];
     imageLoaded = false;
@@ -68,13 +95,22 @@
     $('designStatus').textContent = item ? '3D 제안 시안' : '시안 준비 중';
     // Replace the node so a slow previous type cannot overwrite the current load/error state.
     const old = $('designImage'), img = old.cloneNode(false);
-    img.removeAttribute('src'); img.removeAttribute('srcset');
+    prepareTransition(old, direction);
+    img.removeAttribute('src'); img.removeAttribute('srcset'); img.style.opacity = '0';
     old.replaceWith(img);
-    if (!item) return;
-    img.onload = () => { if (version !== imageVersion) return; imageLoaded = true; $('openViewer').disabled = false; $('imageError').hidden = true; };
-    img.onerror = () => { if (version !== imageVersion) return; imageLoaded = false; img.hidden = true; $('imageError').hidden = false; $('openViewer').disabled = true; };
+    const reveal = () => {
+      img.style.opacity = '';
+      const outgoing = [...img.parentElement.querySelectorAll('.image-outgoing')];
+      if (!item || matchMedia('(prefers-reduced-motion: reduce)').matches || !img.animate) { outgoing.forEach(el=>el.remove()); return; }
+      const options = {duration:460,easing:'cubic-bezier(.22,1,.36,1)'};
+      img.animate([{opacity:.65,transform:`translateX(${direction * 24}px) scale(1.015)`},{opacity:1,transform:'translateX(0) scale(1)'}],options);
+      outgoing.forEach(el=>{const animation=el.animate([{opacity:1,transform:'translateX(0)'},{opacity:0,transform:`translateX(${-direction * 16}px)`}],options);animation.onfinish=()=>el.remove();});
+    };
+    if (!item) { reveal(); return; }
+    img.onload = () => { if (version !== imageVersion) return; reveal(); imageLoaded = true; $('openViewer').disabled = false; $('imageError').hidden = true; };
+    img.onerror = () => { if (version !== imageVersion) return; img.parentElement.querySelectorAll('.image-outgoing').forEach(el=>el.remove()); imageLoaded = false; img.hidden = true; $('imageError').hidden = false; $('openViewer').disabled = true; };
     setImage(img, item, '(max-width:800px) calc(100vw - 48px), 700px');
-    renderViewer();
+    renderViewer(direction);
   }
   function selectType(id, userInitiated) {
     const next = data.types.find(t => t.id === id);
@@ -98,7 +134,7 @@
   function moveImage(delta) {
     if (!selected.images.length) return;
     page = (page + delta + selected.images.length) % selected.images.length;
-    renderImage();
+    renderImage(delta);
   }
   function enableSwipe(surface) {
     let start = null;

@@ -26,6 +26,11 @@ document.getElementById('run').onclick = async()=>{
  check($('typeTitle').textContent==='170㎡(51평)','양식 타입 수동 변경 → 표시 일치');
  await until(()=>$('openViewer').disabled===false);
  $('nextImage').click();await until(()=>$('openViewer').disabled===false);
+ await delay(550);
+ check(d.querySelectorAll('.image-outgoing').length===0&&$('designImage').style.opacity==='','전환 완료 후 잔상 레이어 정리');
+ $('nextImage').click();$('prevImage').click();$('nextImage').click();$('prevImage').click();
+ await until(()=>$('openViewer').disabled===false);await delay(550);
+ check($('imageCounter').textContent==='2 / 2'&&d.querySelectorAll('.image-outgoing').length===0,'빠른 연속 이동 최종 이미지·레이어 정리');
  check($('imageCounter').textContent==='2 / 2','다음 이미지');
  const touchEvent=(target,name,points,ended=false)=>{
   const touches=points.map(([x,y],id)=>new w.Touch({identifier:id,target,clientX:x,clientY:y}));
