@@ -122,7 +122,13 @@
     });
     $('typePanel').setAttribute('aria-labelledby', 'tab-' + id);
     $('typeTitle').textContent = selected.label;
-    $('typeDescription').textContent = selected.description;
+    const descriptionParts = selected.description.split(/(?<=시안입니다\.)\s+/);
+    $('typeDescription').replaceChildren(...descriptionParts.map((text, index) => {
+      const sentence = document.createElement('span');
+      sentence.className = 'description-sentence';
+      sentence.textContent = (index ? ' ' : '') + text;
+      return sentence;
+    }));
     $('estimateType').textContent = selected.label;
     for (const [suffix, key] of [['Price','price'],['Vat','vat']]) {
       $('estimate' + suffix).textContent = selected.estimate[key] || '상담 후 안내';
