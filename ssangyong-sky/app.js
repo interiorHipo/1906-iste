@@ -151,7 +151,7 @@
     brand.replaceChildren(img);
   });
   const ready = () => !!(data.contact.accessKey && data.contact.recipientVerified && data.contact.privacyApproved && data.contact.retention.trim());
-  $('setupNotice').hidden = ready();
+
   if (data.contact.retention) $('retentionNotice').textContent = data.contact.retention;
   if (!ready()) { $('submitButton').textContent = '온라인 접수 준비 중'; $('submitButton').setAttribute('aria-disabled','true'); }
   const fields = {name:form.elements.name,phone:form.elements.phone,type:form.elements.type,consent:form.elements.consent};
@@ -199,6 +199,16 @@
       $('submitButton').textContent = '상담 신청하기 →';
     }
   });
+  // Decorative randomized count, not a real-time analytics measurement.
+  let previousCount = 0;
+  try { previousCount = Number(sessionStorage.getItem('ssangyongVisitorCount')); } catch (_) {}
+  let visitorCount;
+  if (Number.isInteger(previousCount) && previousCount >= 1 && previousCount <= 10) {
+    visitorCount = 1 + Math.floor(Math.random() * 9);
+    if (visitorCount >= previousCount) visitorCount++;
+  } else visitorCount = 1 + Math.floor(Math.random() * 10);
+  $('visitorCount').textContent = visitorCount;
+  try { sessionStorage.setItem('ssangyongVisitorCount', String(visitorCount)); } catch (_) {}
   initAnalytics();
   selectType(data.types[0].id, false);
 })();
