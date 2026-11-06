@@ -27,8 +27,23 @@ document.getElementById('run').onclick = async()=>{
  await until(()=>$('openViewer').disabled===false);
  $('nextImage').click();await until(()=>$('openViewer').disabled===false);
  check($('imageCounter').textContent==='2 / 2','다음 이미지');
+ const touchEvent=(target,name,points,ended=false)=>{
+  const touches=points.map(([x,y],id)=>new w.Touch({identifier:id,target,clientX:x,clientY:y}));
+  target.dispatchEvent(new w.TouchEvent(name,{bubbles:true,touches:ended?[]:touches,changedTouches:touches}));
+ };
+ const swipe=(target,from,to)=>{touchEvent(target,'touchstart',[from]);touchEvent(target,'touchmove',[to]);touchEvent(target,'touchend',[to],true);};
+ const stage=d.querySelector('.image-stage');
+ swipe(stage,[220,100],[60,105]);check($('imageCounter').textContent==='1 / 2','왼쪽 스와이프 다음·순환');
+ swipe(stage,[60,100],[220,105]);check($('imageCounter').textContent==='2 / 2','오른쪽 스와이프 이전');
+ swipe(stage,[100,100],[110,220]);check($('imageCounter').textContent==='2 / 2','세로 스크롤 이미지 이동 없음');
+ swipe(stage,[100,100],[120,102]);check($('imageCounter').textContent==='2 / 2','짧은 터치 이미지 이동 없음');
+ touchEvent(stage,'touchstart',[[200,100],[210,110]]);touchEvent(stage,'touchend',[[20,100]],true);check($('imageCounter').textContent==='2 / 2','두 손가락 확대 이미지 이동 없음');
+ touchEvent(stage,'touchstart',[[200,100]]);touchEvent(stage,'touchcancel',[],true);touchEvent(stage,'touchend',[[20,100]],true);check($('imageCounter').textContent==='2 / 2','취소된 터치 이미지 이동 없음');
+ await until(()=>$('openViewer').disabled===false);
  $('openViewer').click();check($('viewer').open,'확대 보기');
  check(events('view_design_image').length===1&&events('view_design_image')[0][2].type_id==='170','확대 이벤트 타입·1회');
+ swipe($('viewerImage'),[220,100],[60,105]);check($('viewerCounter').textContent==='1 / 2','확대 보기 스와이프');
+ swipe($('viewerImage'),[60,100],[220,105]);check($('viewerCounter').textContent==='2 / 2','확대 보기 역방향 스와이프');
  $('viewer').dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
  check($('viewerCounter').textContent==='1 / 2','확대 이미지 키보드 이동·순환');
  $('closeViewer').click();check(!$('viewer').open,'확대 닫기');

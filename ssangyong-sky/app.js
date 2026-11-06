@@ -100,6 +100,34 @@
     page = (page + delta + selected.images.length) % selected.images.length;
     renderImage();
   }
+  function enableSwipe(surface) {
+    let start = null;
+    surface.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      start = e.touches.length === 1 && selected.images.length > 1 &&
+        !e.target.closest('button,a')
+        ? {x:touch.clientX,y:touch.clientY,id:touch.identifier,type:selected.id} : null;
+    }, {passive:true});
+    surface.addEventListener('touchmove', e => {
+      if (!start) return;
+      if (e.touches.length !== 1) { start = null; return; }
+      const touch = e.touches[0];
+      const dx = Math.abs(touch.clientX - start.x), dy = Math.abs(touch.clientY - start.y);
+      // A vertical gesture belongs to page scrolling, even if it later turns sideways.
+      if (dy > 12 && dy > dx) start = null;
+    }, {passive:true});
+    surface.addEventListener('touchend', e => {
+      const origin = start; start = null;
+      if (!origin || e.touches.length || origin.type !== selected.id) return;
+      const touch = [...e.changedTouches].find(t => t.identifier === origin.id);
+      if (!touch) return;
+      const dx = touch.clientX - origin.x, dy = touch.clientY - origin.y;
+      if (Math.abs(dx) >= 45 && Math.abs(dx) > Math.abs(dy) * 1.5) moveImage(dx < 0 ? 1 : -1);
+    }, {passive:true});
+    surface.addEventListener('touchcancel', () => { start = null; }, {passive:true});
+  }
+  enableSwipe(document.querySelector('.image-stage'));
+  enableSwipe($('viewerImage'));
   data.types.forEach(type => {
     const tab = document.createElement('button');
     tab.type = 'button'; tab.role = 'tab'; tab.id = 'tab-' + type.id;
