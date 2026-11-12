@@ -1,6 +1,10 @@
 (() => {
   'use strict';
   const data = window.SSANGYONG_DATA;
+  const contactTypes = data.types.flatMap(type => type.id === '114B'
+    ? [{id:'114A',label:'114㎡ A(34평)',galleryId:'114B'}, {id:'114B',label:'114㎡ B(34평)',galleryId:'114B'}]
+    : [{id:type.id,label:type.label,galleryId:type.id}]);
+  contactTypes.push({id:'unknown',label:'타입을 모르겠어요 (상담 시 확인)',galleryId:null});
   const $ = id => document.getElementById(id);
   const form = $('contactForm');
   const viewer = $('viewer');
@@ -136,7 +140,8 @@
     for (const [suffix, key] of [['Price','price'],['Vat','vat']]) {
       $('estimate' + suffix).textContent = selected.estimate[key] || '상담 후 안내';
     }
-    $('formType').value = id;
+    const formChoice = contactTypes.find(type => type.id === $('formType').value);
+    if (!formChoice || formChoice.galleryId !== id) $('formType').value = id === '114B' ? '' : id;
     renderImage();
     if (userInitiated) event('select_apartment_type', id);
   }
@@ -180,7 +185,6 @@
     tab.setAttribute('aria-controls','typePanel');
     tab.addEventListener('click', () => selectType(type.id, true));
     $('typeTabs').appendChild(tab);
-    $('formType').add(new Option(type.label, type.id));
   });
   $('typeTabs').addEventListener('keydown', e => {
     const tabs = [...$('typeTabs').children];
@@ -190,7 +194,12 @@
     const target = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length-1 : (index + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
     tabs[target].focus(); selectType(tabs[target].dataset.type, true);
   });
-  $('formType').addEventListener('change', () => selectType($('formType').value, true));
+  $('formType').add(new Option('타입을 선택해주세요', ''));
+  contactTypes.forEach(type => $('formType').add(new Option(type.label, type.id)));
+  $('formType').addEventListener('change', () => {
+    const choice = contactTypes.find(type => type.id === $('formType').value);
+    if (choice?.galleryId) selectType(choice.galleryId, true);
+  });
   $('prevImage').onclick = $('viewerPrev').onclick = () => moveImage(-1);
   $('nextImage').onclick = $('viewerNext').onclick = () => moveImage(1);
   $('retryImage').onclick = () => renderImage();
@@ -233,7 +242,7 @@
     const issues = {
       name: fields.name.value.trim() ? '' : '이름을 입력해주세요.',
       phone: /^0(?:2\d{7,8}|[3-6][1-5]\d{7,8}|70\d{8}|1[016789]\d{7,8})$/.test(phone) ? '' : '연락 가능한 전화번호를 확인해주세요.',
-      type: data.types.some(t => t.id === fields.type.value) ? '' : '타입을 선택해주세요.',
+      type: contactTypes.some(t => t.id === fields.type.value) ? '' : '타입을 선택해주세요.',
       consent: fields.consent.checked ? '' : '개인정보 수집·이용 동의가 필요합니다.'
     };
     Object.entries(issues).forEach(([key,msg]) => { $(key+'Error').textContent = msg; fields[key].setAttribute('aria-invalid',String(!!msg)); });
@@ -248,7 +257,7 @@
     if (!phone) return;
     if (!ready()) { $('formStatus').textContent = '온라인 접수 설정을 준비 중입니다. 010-5135-4781로 전화해주세요. 입력한 내용은 전송되지 않았습니다.'; return; }
     if (form.elements.botcheck.checked) { $('formStatus').textContent = '접수할 수 없습니다. 전화로 문의해주세요.'; return; }
-    const type = data.types.find(t => t.id === fields.type.value);
+    const type = contactTypes.find(t => t.id === fields.type.value);
     const submittedAt = new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Seoul',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date()) + ' (한국 시간, Asia/Seoul)';
     const body = {access_key:data.contact.accessKey,subject:`[1906인테리어] 서면쌍용스윗닷홈 상담 신청 — ${type.label}`,from_name:'1906 INTERIOR',name:fields.name.value.trim(),phone,apartment:data.apartmentName,type:type.label,message:form.elements.message.value.trim(),submitted_at:submittedAt,consent:'개인정보 수집·이용 동의',botcheck:false};
     submitting = true;
@@ -263,7 +272,7 @@
       if (!response.ok || result.success !== true) throw new Error('not accepted');
       $('formStatus').textContent = '상담 신청이 접수되었습니다. 전송 서비스의 접수 성공이며, 네이버 메일함 도착 여부는 별도 확인이 필요합니다.';
       event('generate_lead',type.id);
-      form.reset(); $('formType').value = selected.id;
+      form.reset(); $('formType').value = type.id;
     } catch (error) {
       $('formStatus').textContent = error.name === 'AbortError' ? '응답을 확인하지 못했습니다. 접수되었을 수도 있으니 전화로 확인 후 다시 시도해주세요. 입력 내용은 유지됩니다.' : '전송에 실패했습니다. 입력 내용은 유지됩니다. 잠시 후 다시 신청하거나 전화해주세요.';
     } finally {
