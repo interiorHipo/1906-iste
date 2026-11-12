@@ -38,6 +38,9 @@
     }
   }
   function setImage(img, item, sizes) {
+    // This shared bathroom render contains a dark foreground strip in its left 12%.
+    // Keep the original asset and crop only its presentation (including outgoing slides).
+    img.toggleAttribute('data-crop-left', /\/(114ab-6|114c-5)-1600\.webp$/.test(item.src));
     img.width = item.width || 1200; img.height = item.height || 900;
     img.alt = item.alt || `${selected.label} 3D 제안 시안`;
     img.sizes = sizes;
